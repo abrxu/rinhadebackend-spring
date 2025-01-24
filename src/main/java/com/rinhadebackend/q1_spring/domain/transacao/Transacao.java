@@ -26,16 +26,16 @@ public class Transacao {
     @JoinColumn(name="id_cliente", nullable = false)
     private Integer idCliente;
 
-    @Column(name = "valor")
+    @Column(name = "valor", nullable = false)
     private Integer valor;
 
-    @Column(name = "tipo")
+    @Column(name = "tipo", nullable = false)
     private char tipo;
 
-    @Column(name = "descricao")
+    @Column(name = "descricao", nullable = false)
     private String descricao;
 
-    @Column(name = "realizada_em")
+    @Column(name = "realizada_em", nullable = false)
     private Timestamp realizadaEm;
 
     public Integer getId() {
