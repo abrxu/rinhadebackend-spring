@@ -1,17 +1,24 @@
 package com.rinhadebackend.q1_spring.domain.transacao;
 
+import com.rinhadebackend.q1_spring.domain.cliente.Cliente;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.sql.Timestamp;
+import java.time.Instant;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "transacao")
 public class Transacao {
 
-    public Transacao() {}
-
-    public Transacao(Integer idCliente, Integer valor, char tipo, String descricao, Timestamp realizadaEm) {
-        this.idCliente = idCliente;
+    public Transacao(Cliente cliente, Integer valor, String tipo, String descricao, Instant realizadaEm) {
+        this.cliente = cliente;
         this.valor = valor;
         this.tipo = tipo;
         this.descricao = descricao;
@@ -24,61 +31,18 @@ public class Transacao {
 
     @ManyToOne
     @JoinColumn(name="id_cliente", nullable = false)
-    private Integer idCliente;
+    private Cliente cliente;
 
     @Column(name = "valor", nullable = false)
     private Integer valor;
 
     @Column(name = "tipo", nullable = false)
-    private char tipo;
+    private String tipo;
 
     @Column(name = "descricao", nullable = false)
     private String descricao;
 
     @Column(name = "realizada_em", nullable = false)
-    private Timestamp realizadaEm;
+    private Instant realizadaEm;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public Integer getIdCliente() {
-        return idCliente;
-    }
-
-    public void setIdCliente(Integer idCliente) {
-        this.idCliente = idCliente;
-    }
-
-    public Integer getValor() {
-        return valor;
-    }
-
-    public void setValor(Integer valor) {
-        this.valor = valor;
-    }
-
-    public char getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(char tipo) {
-        this.tipo = tipo;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public Timestamp getRealizadaEm() {
-        return realizadaEm;
-    }
-
-    public void setRealizadaEm(Timestamp realizadaEm) {
-        this.realizadaEm = realizadaEm;
-    }
 }
