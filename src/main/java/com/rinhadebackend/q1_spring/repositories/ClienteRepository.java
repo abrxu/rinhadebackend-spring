@@ -15,6 +15,6 @@ public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
 
     Cliente findClienteById(Integer id);
 
-    @Query("SELECT t FROM Transacao t WHERE t.cliente.id = :id")
+    @Query("SELECT t FROM Transacao t WHERE t.cliente.id = :id ORDER BY t.realizadaEm DESC LIMIT 10")
     List<Transacao> findAllTransacaoById(@Param("id") Integer id);
 }

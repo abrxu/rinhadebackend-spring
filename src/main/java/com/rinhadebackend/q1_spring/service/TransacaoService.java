@@ -4,10 +4,11 @@ import com.rinhadebackend.q1_spring.domain.cliente.Cliente;
 import com.rinhadebackend.q1_spring.domain.transacao.Transacao;
 import com.rinhadebackend.q1_spring.dtos.TransacaoRequestDTO;
 import com.rinhadebackend.q1_spring.dtos.TransacaoResponseDTO;
+import com.rinhadebackend.q1_spring.exceptions.ClienteNotFoundException;
+import com.rinhadebackend.q1_spring.exceptions.InvalidTransactionException;
 import com.rinhadebackend.q1_spring.repositories.ClienteRepository;
 import com.rinhadebackend.q1_spring.repositories.TransacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -20,11 +21,10 @@ public class TransacaoService {
 
     @Autowired
     ClienteRepository clienteRepository;
-
-    public ResponseEntity realizarTransacao(Integer id, TransacaoRequestDTO data) {
+    public TransacaoResponseDTO realizarTransacao(Integer id, TransacaoRequestDTO data) {
         Cliente cliente = clienteRepository.findClienteById(id);
         if (cliente == null) {
-            return ResponseEntity.notFound().build();
+            throw new ClienteNotFoundException("Cliente não foi encontrado");
         }
 
         if (data.descricao() == null
@@ -32,14 +32,14 @@ public class TransacaoService {
                 || (!data.tipo().equalsIgnoreCase("d")
                 && !data.tipo().equalsIgnoreCase("c"))
                 || data.valor() <= 0) {
-            return ResponseEntity.unprocessableEntity().build();
+           throw new InvalidTransactionException("Esta transição é inválida");
         }
 
         int novoSaldo = cliente.getTotal();
         if (data.tipo().equalsIgnoreCase("d")) {
             novoSaldo -= data.valor();
             if (novoSaldo < -cliente.getLimite()) {
-                return ResponseEntity.unprocessableEntity().build();
+                throw new InvalidTransactionException("Esta transição é inválida");
             }
         } else {
             novoSaldo -= data.valor();
@@ -54,6 +54,9 @@ public class TransacaoService {
                 novoSaldo
         );
 
-        return ResponseEntity.ok().body(response);
+        return new TransacaoResponseDTO(
+                cliente.getLimite(),
+                novoSaldo
+        );
     }
 }
