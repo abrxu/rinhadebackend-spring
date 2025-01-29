@@ -7,7 +7,6 @@ import com.rinhadebackend.q1_spring.dtos.TransacoesResponseDTO;
 import com.rinhadebackend.q1_spring.exceptions.ClienteNotFoundException;
 import com.rinhadebackend.q1_spring.repositories.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
